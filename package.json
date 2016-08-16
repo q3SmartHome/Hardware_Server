@@ -1,0 +1,12 @@
+{
+  "name": "SmartHomeDenver",
+  "version": "1.0.0",
+  "description": "Up and running with IoT with Node, Johnny-five and Firebase",
+  "main": "hardware.js",
+  "author": "Bradford Lamson-Scribner, Daniel Abbott, Lucy Follansbee, Pawel Maciulewski",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^2.0",
+    "johnny-five": "^0.10.0"
+  }
+}
