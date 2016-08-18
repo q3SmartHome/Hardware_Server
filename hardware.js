@@ -40,25 +40,23 @@ board.on("ready", function() {
     button: button
   });
 
-  led.on();
-
   button.on("down", function() {
     console.log('down');
-    led.off();
-    firebaseDoorsRef.set({'doors': 'closed'});
+    led.on();
+    firebaseDoorsRef.set({'doors': 'open'});
   });
 
   button.on("up", function() {
     console.log('up');
-    led.on();
-    firebaseDoorsRef.set({'doors': 'open'});
+    led.off();
+    firebaseDoorsRef.set({'doors': 'closed'});
   });
 
   /* ************************************************************* */
 
   // Temperature
   temp.on("change", function() {
-    firebaseTempRef.set({ 'fahrenheit': this.fahrenheit + "°F" });
+    firebaseTempRef.set({ 'celsius': this.celsius });
   });
 
   /* ************************************************************* */
