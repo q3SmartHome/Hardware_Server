@@ -3,8 +3,12 @@ var five = require("johnny-five"), button, photoresistor, board;
 board = new five.Board();
 
 // Temperature
-var firebaseTempRef = new Firebase(
-  "https://smarthomedenver.firebaseio.com/temperature"
+var firebaseTempCRef = new Firebase(
+  "https://smarthomedenver.firebaseio.com/temperatureC"
+);
+
+var firebaseTempFRef = new Firebase(
+  "https://smarthomedenver.firebaseio.com/temperatureF"
 );
 
 // Doors
@@ -13,9 +17,9 @@ var firebaseDoorsRef = new Firebase(
 );
 
 // Lights
-// var firebaseLightsRef = new Firebase(
-//   "https://smarthomedenver.firebaseio.com/lights"
-// );
+var firebaseLightsRef = new Firebase(
+  "https://smarthomedenver.firebaseio.com/lights"
+);
 
 board.on("ready", function() {
   var led = new five.Led(13);
@@ -30,10 +34,10 @@ board.on("ready", function() {
   });
 
   // New light sensor
-//   var photoresistor = new five.Sensor({
-//     pin: "A5",
-//     freq: 20
-//   });
+  var photoresistor = new five.Sensor({
+    pin: "A1",
+    freq: 20
+  });
 
   // Button
   board.repl.inject({
@@ -41,13 +45,11 @@ board.on("ready", function() {
   });
 
   button.on("down", function() {
-    console.log('down');
     led.on();
     firebaseDoorsRef.set({'doors': 'open'});
   });
 
   button.on("up", function() {
-    console.log('up');
     led.off();
     firebaseDoorsRef.set({'doors': 'closed'});
   });
@@ -56,18 +58,19 @@ board.on("ready", function() {
 
   // Temperature
   temp.on("change", function() {
-    firebaseTempRef.set({ 'celsius': this.celsius });
+    firebaseTempCRef.set({ 'temperature': this.celsius });
+    firebaseTempFRef.set({ 'temperature': this.fahrenheit });
   });
 
   /* ************************************************************* */
 
   // Lights
-  // board.repl.inject({
-  //   pot: photoresistor
-  // });
-  //
-  // photoresistor.on('data', function() {
-  //   firebaseLightsRef.set({ 'value': photoresistor.value });
-  // });
+  board.repl.inject({
+    pot: photoresistor
+  });
+
+  photoresistor.on('data', function() {
+    firebaseLightsRef.set({ 'value': photoresistor.value });
+  });
 
 });
